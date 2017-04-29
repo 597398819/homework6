@@ -1,0 +1,510 @@
+<!DOCTYPE html><html class=''>
+<head><script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="http://codepen.io/ines/pen/ojoyKZ" />
+<!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js'></script><link rel='stylesheet prefetch' href='//cdn.jsdelivr.net/emojione/1.5.0/assets/css/emojione.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css'>
+<style class="cp-pen-styles">@import url(https://fonts.googleapis.com/css?family=Muli:400,300|Merriweather:400,300,700);
+body {
+  width: 100vw;
+  height: 100vh;
+  display: table;
+  background: #564787;
+  margin: 0;
+}
+
+#container {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.content {
+  background: white;
+  padding: 1em 0 1em 0;
+}
+
+.reaction {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  margin: 1em 0 0 0;
+}
+.reaction:hover .emoji {
+  transform: scale(1.1, 1.1);
+  transition: all 0.1s;
+}
+.reaction:hover .text {
+  color: #222;
+  transition: all 0.1s;
+}
+
+.emoji {
+  font-size: 4em;
+  cursor: pointer;
+}
+
+.count {
+  position: absolute;
+  top: -1em;
+  right: 0;
+  border-radius: 1.75em;
+  min-width: 1.25em;
+  height: 1.75em;
+  font: 600 0.9em "Muli", arial, sans-serif;
+  background: #ffa630;
+  color: white;
+  border: 0.25em solid white;
+  padding: 0 0.25em;
+  cursor: pointer;
+}
+
+.text {
+  font: 400 1em/2.5em "Muli", arial, sans-serif;
+  color: #ccc;
+  cursor: pointer;
+}
+
+h1,
+h2 {
+  font: 700 2em/3em "Merriweather", georgia, serif;
+  text-align: center;
+  color: #222;
+}
+
+h2 {
+  line-height: 1.25em;
+  margin: 1.5em 0 0 0;
+}
+
+h3 {
+  font: 300 1em/2.5em "Muli", arial, sans-serif;
+  text-align: center;
+  color: #a6a6a6;
+  margin: 0 0 2.5em 0;
+}
+
+#modal {
+  position: absolute;
+  background: white;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 0 0.25em #ccc;
+}
+
+.popup {
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 500px;
+  height: 275px;
+}
+
+.tooltip {
+  position: absolute;
+  top: 26em;
+  left: 7.5em;
+  width: 275px;
+  font-size: 0.8em;
+  padding: 0 1em 1em 1em;
+  margin: 0 0 3em 0;
+  border-radius: 1.5em;
+}
+.tooltip:after {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 0.15em;
+  left: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  margin: auto;
+  border-width: 0.75em;
+  border-style: solid;
+  border-color: transparent transparent white white;
+  box-shadow: 0.1em -0.1em 0.25em #ccc;
+  background: white;
+  transform-origin: 0 0;
+  transform: rotate(-45deg);
+  z-index: 100 !important;
+}
+.tooltip h2 {
+  margin: 0.75em 0 0 0;
+}
+.tooltip h3 {
+  margin: 0.75em 0 1.5em 0;
+  line-height: 1.25em;
+}
+.tooltip .social {
+  font-size: 1.75em;
+}
+.tooltip .fa-close {
+  bottom: -0.75em;
+  font-size: 1.25em;
+}
+
+.fa-close {
+  display: inline-block;
+  position: absolute;
+  top: -0.75em;
+  right: -0.75em;
+  text-align: center;
+  text-decoration: none;
+  color: #222;
+  background: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 50%;
+  width: 1.25em;
+  height: 1.25em;
+  padding: 0.25em;
+  cursor: pointer;
+}
+
+.social {
+  font-size: 2.5em;
+  text-align: center;
+}
+.social .fa {
+  width: 1em;
+  text-decoration: none;
+  background: #222;
+  color: white;
+  margin: 0 0.15em;
+  padding: 0.25em;
+}
+.social .fa:hover {
+  opacity: 0.9;
+}
+.social .fa-facebook {
+  background: #3765a3;
+}
+.social .fa-twitter {
+  background: #6cadde;
+}
+.social .fa-tumblr {
+  background: #1c2f44;
+}
+
+.animate {
+  animation: bounce 0.5s;
+}
+
+.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.settings {
+  font: 300 0.85em "Muli", arial, sans-serif;
+  color: #222;
+  margin: 3em 0 0 0;
+  padding: 1em 0 0 0;
+}
+.settings input[type="radio"] {
+  display: none;
+}
+.settings input[type="radio"] + label:before {
+  content: "";
+  display: inline-block;
+  border: 2px solid #564787;
+  width: 0.75em;
+  height: 0.75em;
+  margin: 0 0.5em 0 0;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.settings input[type="radio"] + label:before {
+  background: white;
+}
+.settings input[type="radio"]:checked + label:before {
+  background: #564787;
+}
+.settings label {
+  margin: 0 1em 0 0.5em;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  from, 20%, 40%, 60%, 80%, to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  20% {
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+  40% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+  60% {
+    transform: scale3d(1.03, 1.03, 1.03);
+  }
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+</style>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Homework 6" content="">
+    <meta name="Jessie Pang" content="">
+
+    <title>Homework 6 Google Analytics Report </title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/landing-page.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="echarts.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="leaflet.ajax.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/timeline.css">
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-97015178-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+    <div id="fb-root"></div>
+    <script>
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.9";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script></head><body>
+<div id="container">
+
+<div class="content">
+<h1>GOOGLE ANALYTICS REPORT</h1>
+<div class="reaction">
+	<div class="emoji">😺</div>
+	<div class="count">52</div>
+	<div class="text">happy</div>
+</div>
+
+<div class="reaction">
+	<div class="emoji">😹</div>
+	<div class="text">amused</div>
+	<div class="count">1361</div>
+</div>
+
+<div class="reaction">
+	<div class="emoji">😻</div>
+	<div class="text">in love</div>
+	<div class="count">94</div>
+</div>  
+  
+<div class="reaction">
+	<div class="emoji">🙀</div>
+	<div class="text">shocked</div>
+	<div class="count">5</div>
+</div>
+
+<div class="reaction">
+	<div class="emoji">😼</div>
+	<div class="text">angry</div>
+	<div class="count">17</div>
+</div>
+
+<div class="reaction">
+	<div class="emoji">😿</div>
+	<div class="text">sad</div>
+	<div class="count">0</div>
+</div>
+ <div class="content-section-a">
+
+        <div class="container">
+            <div class="row"> <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <h3>Page View</h3>
+                    <div class='text'>The analytics of my personal website only have lasted for 7 days (2/4-29/4). And you can see from the chart that there is a peak on 29/4, which is because that day is the deadline of our homework6. As a DDL fighter, I invited my friends to visit my own website.
+                </div> </div>
+                   <div class="row">
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                   <div id="main1" style="width:400px;height:450px;"></div>
+             
+<script type="text/javascript">
+      option = {
+                    "title" : {
+                        "text": "Total Page Views",
+                        "x":"center"
+                    },
+					"color": ["#ff3d3d", "#00a0e9"
+                    ],
+					"tooltip": {
+                        "trigger": "axis"
+					},
+					"legend": {
+					    "align": "left",
+                        "top": "20",
+                        "left": "0",
+						"data":["Page Views"],
+						"selected": {
+							"Page Views": "true"}
+					},
+					"grid": {
+						"left": "0",
+						"right": "3%",
+						"bottom": "3%",
+						"top":"13%",
+						"containLabel": "true"
+					},
+					"xAxis": {
+						"type": "category",
+						"boundaryGap": "false",
+						"splitLine":{
+			                "show": "true",
+			                "lineStyle":{
+			                    "color":["#b1b1b1"],
+			                    "type":"dashed"
+			                }
+			            },
+						"data": ["22 April","23 April","24 April","25 April","26 April","27 April","28 April"]
+					},
+					"yAxis": {
+						"splitLine":{
+			                "show": "true",
+			                "lineStyle":{
+			                    "color":["#b1b1b1"],
+			                    "type":"dashed"
+			                }
+			            }
+					},
+					"series": [
+						{
+							"name":"Page Views",
+							"type":"line",
+							"data":["0", "0", "7", "1", "4", "7", "1", "12"],
+							"label": {
+								"normal": {
+									"show": "true",
+									"position": "top"
+								}
+							}
+						},
+					]
+				};
+            var myChart1 = echarts.init(document.getElementById('main1'));
+            myChart1.setOption(option);
+	</script>
+	</div>  
+    </div>
+        </div>
+    </div>         
+            
+            
+            
+            
+            
+<div class="settings">
+	<strong>Share buttons:</strong>
+	<input type="radio" name="settings" value="popup" id="popup" checked><label for="popup">Popup</label>
+	<input type="radio" name="settings" value="tooltip" id="tooltip"><label for="tooltip">Tooltip</label>
+	<input type="radio" name="settings" value="none" id="none"><label for="none">None</label>
+</div>
+</div>
+</div>
+
+<div class="hidden" id="modal">
+	<a class="fa fa-close" onclick="closeModal()"></a>
+	<h2>Share your feelings!</h2>
+	<h3 id="modalcontent">Let your friends know what you think.</h3>
+	
+	<div class="social">
+		<a class="fa fa-facebook" href="http://www.facebook.com/sharer.php?u=http://codepen.io/inesmontani/full/XmzeYr&t=Reaction emojis with social sharing & animation" target="_blank"></a>
+		<a class="fa fa-twitter" href="http://twitter.com/share?text=Reaction emojis with social sharing & animation &url=http://codepen.io/inesmontani/full/XmzeYr&via=klammerauf" target="_blank"></a>
+		<a class="fa fa-tumblr" href="http://www.tumblr.com/share/link?url=http://codepen.io/inesmontani/full/XmzeYr" target="_blank"></a>
+	</div>
+</div>
+<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script><script src='https://cdnjs.cloudflare.com/ajax/libs/emojione/1.5.0/lib/js/emojione.min.js'></script>
+<script>// Use SVGs
+emojione.imageType = "svg";
+
+var emojis = document.querySelectorAll(".emoji");
+var modal = document.getElementById("modal");
+
+for(i = 0; i < emojis.length; i++) {
+	
+	// Convert emojis
+	emojis[i].innerHTML = emojione.toImage(emojis[i].innerHTML);
+	
+	// Add actions on click
+	emojis[i].parentNode.addEventListener("click", function(event) {
+		var _self = this;
+		
+		// Make sure nothing is opened yet
+		if(modal.classList.contains("hidden")) {
+		
+			// If share buttons are active, open modal after 1s
+			if(!document.getElementById("none").checked) {
+				setTimeout(function() {
+
+					// Tooltips
+					if(document.getElementById("tooltip").checked) {
+						var target = _self.getBoundingClientRect();
+						modal.style.left = target.left + target.width/2 - 150 + "px";
+						modal.style.top = target.top + target.height + 10 + "px";
+						modal.classList.add("tooltip");
+					}
+
+					// Popups
+					else {
+						modal.style.left = 0;
+						modal.style.top = 0;
+						modal.classList.add("popup");
+					}
+
+					// Add emotion to modal text
+					document.getElementById("modalcontent").innerText = "Let your friends know why you feel " + _self.querySelectorAll(".text")[0].innerText + ".";
+
+					// display modal and animate
+					modal.classList.remove("hidden");
+					modal.classList.add("animate");
+				}, 1000);
+			}
+			
+			// counter + 1
+			var counter = parseInt(this.querySelectorAll(".count")[0].innerText) + 1;
+			_self.querySelectorAll(".count")[0].innerText = counter;
+			_self.querySelectorAll(".count")[0].classList.add("animate");
+			
+			// Remove animation class to allow second animation if necessary
+			setTimeout(function() {
+				_self.querySelectorAll(".reactions--count")[0].classList.remove("animate");
+						}, 600);
+		}
+	});
+}
+
+// Close modal and reset classes
+var closeModal = function() {
+	modal.className = "hidden";
+}</script>
+<script>// using the same JS as here: http://codepen.io/inesmontani/pen/OyOEWg
+//# sourceURL=pen.js
+</script>
+</body></html>
